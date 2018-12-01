@@ -52,6 +52,10 @@ returns the response from the Service layer.
 class PropertyController(Resource):
     def create(ownerId, propertyResource):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwner(ownerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Validate Resource
         propertyResourceValidation = PropertyValidator.validateCreate(propertyResource)
         if FieldKey.ERROR in propertyResourceValidation:
@@ -67,12 +71,17 @@ class PropertyController(Resource):
 
     def read(propertyId):
         # Authenticate
+            # All Access
         # Call Service Layer
         response = PropertyService.read(propertyId)
         return ResponseFormatter.getFormmattedServiceResponse(PropertyConverter.toResource, response)
 
     def update(ownerId, propertyId, propertyResource):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwner(ownerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Validate Resource
         propertyResourceValidation = PropertyValidator.validateUpdate(propertyResource)
         if FieldKey.ERROR in propertyResourceValidation:
@@ -86,18 +95,30 @@ class PropertyController(Resource):
 
     def delete(ownerId, propertyId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwner(ownerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = PropertyService.delete(ownerId, propertyId)
         return ResponseFormatter.getFormmattedServiceResponse(PropertyConverter.toResource, response)
 
     def readAll(ownerId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwner(ownerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = PropertyService.readAll(ownerId)
         return ResponseFormatter.getFormmattedServiceListResponse(PropertyConverter.toResource, response)
 
     def history(ownerId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwner(ownerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Create Domain Instance
         start = request.args.get('start', default=None, type=str)
         end = request.args.get('end', default=None, type=str)
@@ -107,6 +128,7 @@ class PropertyController(Resource):
 
     def search():
         # Authenticate
+            # All Access
         # Create Domain Instance
         criteria = {
             "city": request.args.get("city", default=None, type=str),

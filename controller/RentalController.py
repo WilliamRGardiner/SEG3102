@@ -59,6 +59,10 @@ returns the response from the Service layer.
 class RentalController():
     def create(rentalResource):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(rentalResource[RentalField.CUSTOMER])
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Validate Resource
         rentalResourceValidation = RentalValidator.validateCreate(rentalResource)
         if FieldKey.ERROR in rentalResourceValidation:
@@ -73,6 +77,10 @@ class RentalController():
 
     def update(rentalId, rentalResource):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Rental, "customer", rentalId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Validate Resource
         rentalResourceValidation = RentalValidator.validateUpdate(rentalResource)
         if FieldKey.ERROR in rentalResourceValidation:
@@ -83,16 +91,24 @@ class RentalController():
         rental.status = RentalStatus.PROPOSED
         # Call Service Layer
         response = RentalService.update(rental)
-        return ResponseFormatter.getFormmattedServiceResponse(RentalConverter.toResource, response)
+        return ResponseFormatter.getFormmattedServiceResponse(RentalConverter.toReso0urce, response)
 
     def read(rentalId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Rental, "customer", rentalId).allowOwnerOf(Rental, "owner", rentalId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = RentalService.read(rentalId)
         return ResponseFormatter.getFormmattedServiceResponse(RentalConverter.toResource, response)
 
     def confirm(rentalId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent()
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Create Domain Instance
         rental = Rental()
         rental.id = rentalId
@@ -103,6 +119,10 @@ class RentalController():
 
     def deny(rentalId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Rental, "customer", rentalId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Create Domain Instance
         rental = Rental()
         rental.id = rentalId
@@ -113,6 +133,10 @@ class RentalController():
 
     def cancel(rentalId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent()
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Create Domain Instance
         rental = Rental()
         rental.id = rentalId

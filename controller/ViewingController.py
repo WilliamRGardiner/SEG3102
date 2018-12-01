@@ -48,6 +48,10 @@ class ViewingController:
     '''Creates an Viewing'''
     def create(customerId, propertyId, viewingResource):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(customerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Validate Resource
         viewingResourceValidation = ViewingValidator.validateCreate(viewingResource)
         if FieldKey.ERROR in viewingResourceValidation:
@@ -64,6 +68,10 @@ class ViewingController:
     '''Reads an Viewing'''
     def read(customerId, viewingId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(customerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = ViewingService.read(customerId, viewingId)
         return ResponseFormatter.getFormmattedServiceResponse(ViewingConverter.toResource, response)
@@ -71,6 +79,10 @@ class ViewingController:
     '''Gets all Viewings for a Customer'''
     def getAll(customerId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(customerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = ViewingService.readAll(customerId)
         return ResponseFormatter.getFormmattedServiceListResponse(ViewingConverter.toResource, response)
@@ -78,6 +90,10 @@ class ViewingController:
     '''Gets all upcoming viewings for a Customer'''
     def getList(customerId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(customerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = ViewingService.getList(customerId)
         return ResponseFormatter.getFormmattedServiceListResponse(ViewingConverter.toResource, response)
@@ -85,6 +101,10 @@ class ViewingController:
     '''Updates an Viewing'''
     def update(customerId, viewingId, viewingResource):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(customerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Validate Resource
         viewingResourceValidation = ViewingValidator.validateUpdate(viewingResource)
         if FieldKey.ERROR in viewingResourceValidation:
@@ -99,6 +119,10 @@ class ViewingController:
     '''Deletes an Viewing'''
     def delete(customerId, viewingId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(customerId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = ViewingService.delete(customerId, viewingId)
         return ResponseFormatter.getFormmattedServiceResponse(ViewingConverter.toResource, response)

@@ -33,13 +33,18 @@ class SessionService():
         if(len(sessions) > 1):
             raise Exception("Multiple sessions for user")
         elif(len(sessions) == 1):
-            session.id = sessions[0].id
-            processor.add(UpdateEntityTask(Session, SessionService.mergeSessions, session))
+            if SessionUtility.isExpired(sessions[0]):
+                processor.add(DeleteEntityTask(Session, sessions[0].id))
+                processor.add(SaveNewEntityTask(session))
+            else:
+                session.id = sessions[0].id
+                processor.add(UpdateEntityTask(Session, SessionService.mergeSessions, session))
         else:
             processor.add(SaveNewEntityTask(session))
         processor.process()
+        returnSession = ReadOnlyAccess.getEntityCopy(Session, session.id)
         # Return Result
-        return {FieldKey.SUCCESS: session}
+        return {FieldKey.SUCCESS: returnSession}
 
     def logout(sessionToken):
         # Validate in persistence level

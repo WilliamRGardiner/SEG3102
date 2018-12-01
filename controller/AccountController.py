@@ -94,6 +94,10 @@ class AccountController:
     '''Reads an Account'''
     def read(accountId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(accountId).allowOwner(accountId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = AccountService.read(accountId)
         return ResponseFormatter.getFormmattedServiceResponse(AccountConverter.toResource, response)
@@ -101,6 +105,10 @@ class AccountController:
     '''Updates an Account'''
     def update(accountId, accountResource):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(accountId).allowOwner(accountId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Validate Resource
         accountResourceValidation = AccountValidator.validateUpdate(accountResource)
         if FieldKey.ERROR in accountResourceValidation:
@@ -115,6 +123,10 @@ class AccountController:
     '''Deletes an Account'''
     def delete(accountId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowCustomer(accountId).allowOwner(accountId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = AccountService.delete(accountId)
         return ResponseFormatter.getFormmattedServiceResponse(AccountConverter.toResource, response)

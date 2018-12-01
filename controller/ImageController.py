@@ -49,6 +49,10 @@ class ImageController():
     '''Uploads an Image File'''
     def add(propertyId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Property, "ownerId", propertyId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Create Domain Instance
         image = ImageFactory.createDomain()
         image.id = IdGenerator.generate()
@@ -61,6 +65,10 @@ class ImageController():
     '''Deletes an Images File and Data'''
     def remove(propertyId, imageId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Property, "ownerId", propertyId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = ImageService.remove(propertyId, imageId)
         return ResponseFormatter.getFormmattedServiceResponse(ImageConverter.toResource, response)
@@ -68,6 +76,10 @@ class ImageController():
     '''Updates an Images Data'''
     def update(propertyId, imageId, imageResource):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Property, "ownerId", propertyId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Validate Resource
         imageResourceValidation = ImageValidator.validateUpdate(imageResource)
         if FieldKey.ERROR in imageResourceValidation:
@@ -83,6 +95,7 @@ class ImageController():
     '''Reads an Image File'''
     def read(propertyId, imageId):
         # Authenticate
+            # All Access
         # Call Service Layer
         file, type = ImageService.read(propertyId, imageId)
         return ResponseFormatter.getFileResponse(file, type)
@@ -90,6 +103,7 @@ class ImageController():
     '''Reads all Image Data for a Property'''
     def readAll(propertyId):
         # Authenticate
+            # All Access
         # Call Service Layer
         response = ImageService.readAll(propertyId)
         return ResponseFormatter.getFormmattedServiceListResponse(ImageConverter.toResource, response)
@@ -97,6 +111,10 @@ class ImageController():
     '''Sets an Image to be the main Image for a Property'''
     def setMain(propertyId, imageId):
         # Authenticate
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Property, "ownerId", propertyId)
+        authentification = authenticator.authenticate()
+        if FieldKey.ERROR in authentification:
+            return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
         response = ImageService.setMain(propertyId, imageId)
         return ResponseFormatter.getFormmattedServiceResponse(PropertyConverter.toResource, response)

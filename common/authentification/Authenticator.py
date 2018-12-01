@@ -1,5 +1,6 @@
 from common.request_constants.FieldKey import FieldKey
 from domain.Account import AccountType
+from database.ReadOnlyAccess import ReadOnlyAccess
 from .SessionUtility import SessionUtility
 
 class Authenticator():
@@ -21,6 +22,13 @@ class Authenticator():
     def allowOwner(self, id=None):
         self.allowAccount(id, AccountType.OWNER)
         return self
+
+    def allowOwnerOf(self, cEntity, accountField, entityId):
+        entity = ReadOnlyAccess.getEntityCopy(entityId)
+        if enitiy is not None:
+            accountId = getattr(enitiy, accountField)
+            if accountId == self.account.id:
+                self.passed = True
 
     def allowAccount(self, id, accountType):
         if self.isValid:
