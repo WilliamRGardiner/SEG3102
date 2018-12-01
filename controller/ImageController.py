@@ -2,16 +2,19 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from json import loads
 
+from common.authentification.Authenticator import Authenticator
 from common.converter.ImageConverter import ImageConverter, ImageField
 from common.converter.PropertyConverter import PropertyConverter
 from common.factory.ImageFactory import ImageFactory
 from common.request_constants.HttpStatus import HttpStatus
 from common.request_constants.FieldKey import FieldKey
+from common.request_constants.HeaderKey import HeaderKey
 from common.utils.ResponseFormatter import ResponseFormatter
 from common.utils.IdGenerator import IdGenerator
 from common.validator.resource.ImageValidator import ImageValidator
 
 from domain.Image import Image
+from domain.Property import Property
 from service.ImageService import ImageService
 
 '''Routes incoming calls to the ImageController'''
@@ -48,7 +51,7 @@ class ImageController():
 
     '''Uploads an Image File'''
     def add(propertyId):
-        # Authenticate
+        # Authentication
         authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Property, "ownerId", propertyId)
         authentification = authenticator.authenticate()
         if FieldKey.ERROR in authentification:

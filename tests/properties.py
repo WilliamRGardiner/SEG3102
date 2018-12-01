@@ -1,0 +1,2 @@
+agentUsername = 'admin'
+agentPassword = 'admin'

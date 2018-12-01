@@ -4,7 +4,7 @@ import copy
 class ReadOnlyAccess():
     def getEntityCopy(cEntity, entityId):
         session = Repository.Session()
-        entity = session.query(cEntity).filter_by(id=entityId).one()
+        entity = session.query(cEntity).filter_by(id=entityId).one_or_none()
         entityCopy = copy.deepcopy(entity)
         session.rollback()
         return entityCopy

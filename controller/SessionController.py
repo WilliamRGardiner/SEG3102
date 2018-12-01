@@ -7,6 +7,7 @@ from common.converter.AccountConverter import AccountConverter, AccountField
 from common.factory.SessionFactory import SessionFactory
 from common.request_constants.HttpStatus import HttpStatus
 from common.request_constants.FieldKey import FieldKey
+from common.request_constants.HeaderKey import HeaderKey
 from common.utils.ResponseFormatter import ResponseFormatter
 from common.utils.IdGenerator import IdGenerator
 from common.validator.resource.AccountValidator import AccountValidator
@@ -21,8 +22,8 @@ class LoginRouter(Resource):
 
 '''Routes incoming calls to the SessionController'''
 class LogoutRouter(Resource):
-    def put(self, sessionToken):
-        return SessionController.logout(sessionToken)
+    def put(self):
+        return SessionController.logout()
 
 '''
 Authenticates Caller,
@@ -39,7 +40,6 @@ class SessionController:
         return ResponseFormatter.getFormmattedServiceResponse(SessionConverter.toResource, response)
 
     '''Deletes a Session'''
-    def logout(sessionToken):
-        session = SessionFactory.createDomain()
-        response = SessionService.logout(sessionToken)
+    def logout():
+        response = SessionService.logout(request.headers.get(HeaderKey.TOKEN))
         return ResponseFormatter.getFormmattedServiceResponse(SessionConverter.toResource, response)

@@ -9,6 +9,9 @@ from common.Error import Error
 from common.validator.persistence.AccountValidator import AccountValidator
 
 from domain.Account import Account
+from domain.Rental import Rental
+from domain.Viewing import Viewing
+from domain.Credential import Credential
 
 from database.ReadOnlyAccess import ReadOnlyAccess
 from task.TaskProcessor import TaskProcessor
@@ -32,9 +35,10 @@ class AccountService():
         processor = TaskProcessor()
         processor.add(SaveNewEntityTask(account))
         processor.add(SaveNewEntityTask(credential))
+        response = copy.deepcopy(account)
         processor.process()
         # Return Result
-        return {FieldKey.SUCCESS: account}
+        return {FieldKey.SUCCESS: response}
 
     def read(accountId):
         # Validate in persistence level
@@ -81,6 +85,7 @@ class AccountService():
     def mergeAccounts(original, new):
         original.firstName = new.firstName if new.firstName is not None else original.firstName
         original.lastName = new.lastName if new.lastName is not None else original.lastName
+        original.email = new.email if new.email is not None else original.email
         original.dateOfBirth = new.dateOfBirth if new.dateOfBirth is not None else original.dateOfBirth
         return original
 

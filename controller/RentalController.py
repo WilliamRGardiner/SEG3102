@@ -2,9 +2,11 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from json import loads
 
+from common.authentification.Authenticator import Authenticator
 from common.converter.RentalConverter import RentalConverter, RentalField
 from common.request_constants.HttpStatus import HttpStatus
 from common.request_constants.FieldKey import FieldKey
+from common.request_constants.HeaderKey import HeaderKey
 from common.utils.ResponseFormatter import ResponseFormatter
 from common.utils.IdGenerator import IdGenerator
 from common.validator.resource.RentalValidator import RentalValidator

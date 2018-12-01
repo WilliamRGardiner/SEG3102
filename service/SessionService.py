@@ -3,12 +3,15 @@ import copy
 from database.Repository import Repository
 from database.ReadOnlyAccess import ReadOnlyAccess
 
+from common.authentification.SessionUtility import SessionUtility
 from common.request_constants.HttpStatus import HttpStatus
 from common.request_constants.FieldKey import FieldKey
 from common.Error import Error
 from common.validator.persistence.SessionValidator import SessionValidator
 
+from domain.Account import Account
 from domain.Session import Session
+from domain.AugmentedSession import AugmentedSession
 
 from database.ReadOnlyAccess import ReadOnlyAccess
 from task.TaskProcessor import TaskProcessor
@@ -42,13 +45,18 @@ class SessionService():
         else:
             processor.add(SaveNewEntityTask(session))
         processor.process()
-        returnSession = ReadOnlyAccess.getEntityCopy(Session, session.id)
+        returnSession = AugmentedSession()
+        returnSession.id = session.id
+        accounts = ReadOnlyAccess.getEntityListCopy(Account, {"username": session.username})
+        if len(accounts) == 1:
+            returnSession.accountId = accounts[0].id
+            returnSession.accountType = accounts[0].type
         # Return Result
         return {FieldKey.SUCCESS: returnSession}
 
     def logout(sessionToken):
         # Validate in persistence level
-        validatorResponse = SessionValidator.validateRead(sessionToken)
+        validatorResponse = SessionValidator.validateDelete(sessionToken)
         if FieldKey.ERROR in validatorResponse:
             return validatorResponse
         session = ReadOnlyAccess.getEntityCopy(Session, sessionToken)

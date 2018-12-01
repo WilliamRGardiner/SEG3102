@@ -1,4 +1,9 @@
 ###############################################################################
+# App Configurations
+###############################################################################
+app_port = '3001'               # The port the App runs on
+
+###############################################################################
 # Database Configurations
 ###############################################################################
 database_host='localhost'       # Host
@@ -6,7 +11,7 @@ database_name='wfhx'            # Database Name
 database_username='postgres'    # Username
 database_password='password'    # Password
 database_type='postgresql'      # 'postgresql' or 'mysql'(untested)
-database_echo=True              # If True, DB operations will be printed to the console
+database_echo=False             # If True, DB operations will be printed to the console
 
 ###############################################################################
 # Admin User Configuration

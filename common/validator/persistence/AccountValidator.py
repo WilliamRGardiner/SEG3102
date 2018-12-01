@@ -1,6 +1,7 @@
 from .PersistenceValidator import PersistenceValidator
 from domain.Account import Account
 from domain.Property import Property
+from domain.Viewing import Viewing
 from domain.Rental import Rental, RentalStatus
 from common.utils.Date import Date
 from common.validator.BaseValidator import BaseValidator
@@ -17,7 +18,7 @@ class AccountValidator():
             errors.append(PersistenceValidator.entityDoesNotExist("Account", "id", accountId))
         return BaseValidator.getValidationMessage(errors)
 
-    def validateUpdateAccount(account):
+    def validateUpdate(account):
         errors = []
         if PersistenceValidator.checkExists(Account, account.id):
             original = ReadOnlyAccess.getEntityCopy(Account, account.id)
@@ -27,14 +28,14 @@ class AccountValidator():
         return BaseValidator.getValidationMessage(AccountValidator.checkUniqueness(errors, account, original))
 
     def validateDelete(accountId):
+        errors = []
         properties = ReadOnlyAccess.getEntityListCopy(Property, {"ownerId": accountId})
 
-        rentals= ReadOnlyAccess.getEntityListCopy(Rental, {"owner": accountId})
-        rentals.extend(ReadOnlyAccess.getEntityListCopy(Rental, {"customer": accountId}))
+        rentals = ReadOnlyAccess.getEntityListCopy(Rental, {"customer": accountId})
         rentals.extend(ReadOnlyAccess.getEntityListCopy(Rental, {"agent": accountId}))
         rentals = list(filter(lambda x: Date.after(Date.toDate(x.end), Date.now()) and x.status == RentalStatus.CONFIRMED, rentals))
 
-        viewings = ReadOnlyAccess.getEntityListCopy(Property, {"customerId": accountId})
+        viewings = ReadOnlyAccess.getEntityListCopy(Viewing, {"customerId": accountId})
         viewings = list(filter(lambda x: Date.after(Date.toDate(x.date), Date.now()), rentals))
 
         if len(properties) > 0:

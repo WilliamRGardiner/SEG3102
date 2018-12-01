@@ -80,4 +80,4 @@ api.add_resource(RentalCustomerRouter, '/rental/customer/<customerId>')
 
 # Run on Port
 if __name__ == '__main__':
-     app.run(port='3001')
+     app.run(port=properties.app_port)

@@ -24,11 +24,12 @@ class Authenticator():
         return self
 
     def allowOwnerOf(self, cEntity, accountField, entityId):
-        entity = ReadOnlyAccess.getEntityCopy(entityId)
-        if enitiy is not None:
-            accountId = getattr(enitiy, accountField)
+        entity = ReadOnlyAccess.getEntityCopy(cEntity, entityId)
+        if entity is not None:
+            accountId = getattr(entity, accountField)
             if accountId == self.account.id:
                 self.passed = True
+        return self
 
     def allowAccount(self, id, accountType):
         if self.isValid:
@@ -37,6 +38,9 @@ class Authenticator():
                     self.passed = True
                 else:
                     self.passed = self.passed or self.account.id == id
+
+    def allowAll():
+        self.passed = True
 
     def authenticate(self):
         if not self.isValid:

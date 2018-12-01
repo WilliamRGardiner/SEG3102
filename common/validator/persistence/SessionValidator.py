@@ -1,4 +1,5 @@
 from .PersistenceValidator import PersistenceValidator
+from domain.Session import Session
 from domain.Account import Account
 from domain.Credential import Credential
 from common.validator.BaseValidator import BaseValidator

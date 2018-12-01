@@ -116,8 +116,9 @@ class AccountController:
         # Create Domain Instance
         account = AccountConverter.toDomain(accountResource)
         account.id = accountId
+        credential = CredentialFactory.createDomain(account.id, accountResource[AccountField.PASSWORD])
         # Call Service Layer
-        response = AccountService.update(account)
+        response = AccountService.update(account, credential)
         return ResponseFormatter.getFormmattedServiceResponse(AccountConverter.toResource, response)
 
     '''Deletes an Account'''
