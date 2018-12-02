@@ -37,7 +37,7 @@ class ViewingIdRouter(Resource):
 '''Routes incoming calls to the ViewingController'''
 class ViewingListRouter(Resource):
     def get(self, customerId):
-        return ViewingController.getLsid(customerId)
+        return ViewingController.getList(customerId)
 
 '''
 Authenticates Caller,
@@ -97,7 +97,7 @@ class ViewingController:
         if FieldKey.ERROR in authentification:
             return ResponseFormatter.getFormattedValidatorResponse(authentification)
         # Call Service Layer
-        response = ViewingService.getList(customerId)
+        response = ViewingService.readList(customerId)
         return ResponseFormatter.getFormmattedServiceListResponse(ViewingConverter.toResource, response)
 
     '''Updates an Viewing'''

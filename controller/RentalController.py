@@ -97,7 +97,7 @@ class RentalController():
 
     def read(rentalId):
         # Authenticate
-        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Rental, "customer", rentalId).allowOwnerOf(Rental, "owner", rentalId)
+        authenticator = Authenticator(request.headers.get(HeaderKey.TOKEN)).allowAgent().allowOwnerOf(Rental, "customer", rentalId)
         authentification = authenticator.authenticate()
         if FieldKey.ERROR in authentification:
             return ResponseFormatter.getFormattedValidatorResponse(authentification)

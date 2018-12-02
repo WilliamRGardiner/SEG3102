@@ -5,7 +5,7 @@ from common.validator.BaseValidator import BaseValidator
 class RentalValidator():
     FIELDS = {
         ResourceValidator.CREATE: {
-            ResourceValidator.MANDATORY: [RentalField.CUSTOMER, RentalField.PROPERTY, RentalField.AGENT, RentalField.RENT, RentalField.START, RentalField.END],
+            ResourceValidator.MANDATORY: [RentalField.CUSTOMER, RentalField.PROPERTY, RentalField.RENT, RentalField.START, RentalField.END],
             ResourceValidator.NON_ALLOWED: [RentalField.ID, RentalField.STATUS]
         },
         ResourceValidator.UPDATE: {

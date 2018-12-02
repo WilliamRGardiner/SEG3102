@@ -22,13 +22,13 @@ class ViewingValidator():
             errors.append(PersistenceValidator.entityDoesNotExist("Customer", "id", customerId))
         if not PersistenceValidator.checkExists(Viewing, viewingId):
             errors.append(PersistenceValidator.entityDoesNotExist("Viewing", "id", viewingId))
-        if not ReadOnlyAccess.getEntityCopy(Viewing, vewingId).customerId == customerId:
+        if not ReadOnlyAccess.getEntityCopy(Viewing, viewingId).customerId == customerId:
             errors.append(PersistenceValidator.linkedDomainNotFoundError("Customer", "Viewing", customerId, viewingId))
         return errors
 
     def validateUpdate(viewing):
         errors = []
-        if not ViewingValidator.viewingExists(viewing.id):
+        if PersistenceValidator.checkExists(Viewing, viewing.id):
             original = ReadOnlyAccess.getEntityCopy(Viewing, viewing.id)
         else:
             original = Viewing()

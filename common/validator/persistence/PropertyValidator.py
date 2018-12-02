@@ -3,6 +3,7 @@ from domain.Account import Account, AccountType
 from domain.Property import Property
 from domain.Viewing import Viewing
 from domain.Rental import Rental, RentalStatus
+from common.utils.Date import Date
 from common.validator.BaseValidator import BaseValidator
 from database.ReadOnlyAccess import ReadOnlyAccess
 

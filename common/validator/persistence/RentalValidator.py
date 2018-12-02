@@ -1,6 +1,8 @@
 from .PersistenceValidator import PersistenceValidator
 from domain.Rental import Rental, RentalStatus
-from domain.Account import Account
+from domain.Account import Account, AccountType
+from domain.Property import Property
+from common.utils.Date import Date
 from common.validator.BaseValidator import BaseValidator
 from database.ReadOnlyAccess import ReadOnlyAccess
 
@@ -11,10 +13,8 @@ class RentalValidator():
             errors.append(PersistenceValidator.entityDoesNotExist("Customer", "id", rental.customer))
         elif not ReadOnlyAccess.getEntityCopy(Account, rental.customer).type == AccountType.CUSTOMER:
             errors.append(PersistenceValidator.entityDoesNotExist("Customer", "id", rental.customer))
-        if not PersistenceValidator.checkExists(Account, rental.owner):
-            errors.append(PersistenceValidator.entityDoesNotExist("Owner", "id", rental.owner))
-        elif not ReadOnlyAccess.getEntityCopy(Account, rental.owner).type == AccountType.OWNER:
-            errors.append(PersistenceValidator.entityDoesNotExist("Owner", "id", rental.owner))
+        if not PersistenceValidator.checkExists(Property, rental.property):
+            errors.append(PersistenceValidator.entityDoesNotExist("Property", "id", rental.property))
         if not PersistenceValidator.checkExists(Property, rental.property):
             errors.append(PersistenceValidator.entityDoesNotExist("Property", "id", rental.property))
         return BaseValidator.getValidationMessage(RentalValidator.checkUniqueness(errors, rental))
@@ -27,7 +27,7 @@ class RentalValidator():
 
     def validateUpdate(rental):
         errors = []
-        if PersistenceValidator.checkExists(Rental, rentalId):
+        if PersistenceValidator.checkExists(Rental, rental.id):
             original = ReadOnlyAccess.getEntityCopy(Rental, rental.id)
         else:
             original = Rental()

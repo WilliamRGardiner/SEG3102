@@ -11,9 +11,8 @@ from domain.Session import Session
 
 class SessionUtility():
     def getAccount(sessionToken):
-        try:
-            session = ReadOnlyAccess.getEntityCopy(Session, sessionToken)
-        except:
+        session = ReadOnlyAccess.getEntityCopy(Session, sessionToken)
+        if session is None:
             return False, None
         if SessionUtility.isExpired(session):
             return False, None

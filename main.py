@@ -19,7 +19,7 @@ from controller.SessionController import LoginRouter, LogoutRouter
 from controller.AccountController import AgentRouter, AgentIdRouter, CustomerRouter, CustomerIdRouter, OwnerRouter, OwnerIdRouter
 from controller.PropertyController import PropertyRouter, PropertyIdRouter, PropertySimpleRouter, PropertyHistoryRouter, PropertySearchRouter
 from controller.ImageController import ImageRouter, ImageIdRouter, ImageMainRouter
-from controller.ViewingController import ViewingRouter, ViewingIdRouter
+from controller.ViewingController import ViewingRouter, ViewingIdRouter, ViewingListRouter
 from controller.RentalController import RentalRouter, RentalIdRouter, RentalConfirmRouter, RentalDenyRouter, RentalCancelRouter, RentalQueryRouter, RentalCustomerRouter
 
 # Create DB Connection
@@ -69,6 +69,7 @@ api.add_resource(ImageRouter, '/property/<propertyId>/image')
 api.add_resource(ImageIdRouter, '/property/<propertyId>/image/<imageId>')
 api.add_resource(ImageMainRouter, '/property/<propertyId>/image/<imageId>/main')
 api.add_resource(ViewingRouter, '/customer/<customerId>/viewing')
+api.add_resource(ViewingListRouter, '/customer/<customerId>/viewing-list')
 api.add_resource(ViewingIdRouter, '/customer/<customerId>/viewing/<viewingId>')
 api.add_resource(RentalRouter, '/rental')
 api.add_resource(RentalIdRouter, '/rental/<rentalId>')

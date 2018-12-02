@@ -34,9 +34,9 @@ class RentalConverter():
 '''The known JSON fields'''
 class RentalField():
     ID = "id"
-    CUSTOMER = "customer"
-    PROPERTY = "property"
-    AGENT = "agent"
+    CUSTOMER = "customer_id"
+    PROPERTY = "property_id"
+    AGENT = "agent_id"
     RENT = "amount"
     START = "start"
     END = "end"

@@ -1,2 +1,0 @@
-agentUsername = 'admin'
-agentPassword = 'admin'

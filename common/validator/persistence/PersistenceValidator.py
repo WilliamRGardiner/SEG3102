@@ -30,10 +30,10 @@ class PersistenceValidator():
         return {"field": PersistenceValidator.NO_FIELD, "msg": entity + ": " + entityId + " is still active"}
 
     def subEntitiesExist(entity, subentity, number):
-        return {"field": PersistenceValidator.NO_FIELD, "msg": "Cannot delete " + entity + " with " + number + " " + subentity}
+        return {"field": PersistenceValidator.NO_FIELD, "msg": "Cannot delete " + entity + " with " + str(number) + " " + subentity}
 
     def activeSubEntitiesExist(entity, subentity, number):
-        return {"field": PersistenceValidator.NO_FIELD, "msg": "Cannot delete " + entity + " with " + number + " active " + subentity}
+        return {"field": PersistenceValidator.NO_FIELD, "msg": "Cannot delete " + entity + " with " + str(number) + " active " + subentity}
 
     def linkedDomainNotFoundError(entity, subentity, entityId, subentityId):
         return {"field": PersistenceValidator.NO_FIELD, "msg": subentity + ": " + subentityId + " not found for " + entity + ": " + entityId}

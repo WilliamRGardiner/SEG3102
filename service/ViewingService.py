@@ -4,9 +4,10 @@ from common.converter.ViewingConverter import ViewingConverter
 from common.request_constants.HttpStatus import HttpStatus
 from common.request_constants.FieldKey import FieldKey
 from common.Error import Error
+from common.utils.Date import Date
 from common.validator.persistence.ViewingValidator import ViewingValidator
 
-from database.Repository import Repository
+from database.ReadOnlyAccess import ReadOnlyAccess
 from domain.Viewing import Viewing
 
 from task.TaskProcessor import TaskProcessor
@@ -44,7 +45,7 @@ class ViewingService():
 
     def update(updatedViewing):
         # Validate in persistence level
-        validatorResponse = ViewingValidator.validateUpdateViewing(updatedViewing)
+        validatorResponse = ViewingValidator.validateUpdate(updatedViewing)
         if FieldKey.ERROR in validatorResponse:
             return validatorResponse
         # Create and process Tasks
@@ -81,14 +82,17 @@ class ViewingService():
         return {FieldKey.SUCCESS: viewingList}
 
     def readList(customerId):
-        #Needs Impl
-        return ViewingService.readAll(customerId)
+        # Validate in persistence level
+        validatorResponse = ViewingValidator.validateReadAll(customerId)
+        if FieldKey.ERROR in validatorResponse:
+            return validatorResponse
+        # Read Entities
+        searchFilter = {"customerId": customerId}
+        viewingList = ReadOnlyAccess.getEntityListCopy(Viewing, searchFilter)
+        viewingList = list(filter(lambda x: Date.after(Date.toDate(x.date), Date.now()), viewingList))
+        return {FieldKey.SUCCESS: viewingList}
 
-    def mergeProperties(original, new):
-        original.mainImageId = new.mainImageId if new.mainImageId is not None else original.mainImageId
-        original.city = new.city if new.city is not None else original.city
-        original.province = new.province if new.province is not None else original.province
-        original.rent = new.rent if new.rent is not None else original.rent
-        original.addr1 = new.addr1 if new.addr1 is not None else original.addr1
-        original.addr2 = new.addr2 if new.addr2 is not None else original.addr2
+    def mergeViewings(original, new):
+        original.date = new.date if new.date is not None else original.date
+        original.comment = new.comment if new.comment is not None else original.comment
         return original

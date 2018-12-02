@@ -7,6 +7,7 @@ from common.Error import Error
 from common.validator.persistence.RentalValidator import RentalValidator
 
 from database.Repository import Repository
+from database.ReadOnlyAccess import ReadOnlyAccess
 from domain.Rental import Rental, RentalStatus
 
 from task.TaskProcessor import TaskProcessor
@@ -44,7 +45,7 @@ class RentalService():
 
     def update(updatedRental):
         # Validate in persistence level
-        validatorResponse = RentalValidator.validateUpdateProperty(updatedRental)
+        validatorResponse = RentalValidator.validateUpdate(updatedRental)
         if FieldKey.ERROR in validatorResponse:
             return validatorResponse
         # Create and process Tasks
