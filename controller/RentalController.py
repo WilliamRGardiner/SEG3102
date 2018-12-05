@@ -17,7 +17,11 @@ from service.RentalService import RentalService
 '''Routes incoming calls to the RentalController'''
 class RentalRouter(Resource):
     def post(self):
-        return RentalController.create(loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return RentalController.create(loads(data))
 
 '''Routes incoming calls to the RentalController'''
 class RentalIdRouter(Resource):
@@ -25,7 +29,11 @@ class RentalIdRouter(Resource):
         return RentalController.read(rentalId)
 
     def put(self, rentalId):
-        return RentalController.update(rentalId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return RentalController.update(rentalId, loads(data))
 
 '''Routes incoming calls to the RentalController'''
 class RentalConfirmRouter(Resource):
@@ -45,7 +53,11 @@ class RentalCancelRouter(Resource):
 '''Routes incoming calls to the RentalController'''
 class RentalQueryRouter(Resource):
     def put(self):
-        return RentalController.query(loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return RentalController.query(loads(data))
 
 '''Routes incoming calls to the RentalController'''
 class RentalCustomerRouter(Resource):

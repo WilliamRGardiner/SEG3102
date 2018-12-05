@@ -17,7 +17,11 @@ from service.PropertyService import PropertyService
 '''Routes incoming calls to the PropertyController'''
 class PropertyRouter(Resource):
     def post(self, ownerId):
-        return PropertyController.create(ownerId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return PropertyController.create(ownerId, loads(data))
 
     def get(self, ownerId):
         return PropertyController.readAll(ownerId)
@@ -25,7 +29,11 @@ class PropertyRouter(Resource):
 '''Routes incoming calls to the PropertyController'''
 class PropertyIdRouter(Resource):
     def put(self, ownerId, propertyId):
-        return PropertyController.update(ownerId, propertyId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return PropertyController.update(ownerId, propertyId, loads(data))
 
     def delete(self, ownerId, propertyId):
         return PropertyController.delete(ownerId, propertyId)

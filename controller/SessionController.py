@@ -18,7 +18,11 @@ from service.SessionService import SessionService
 '''Routes incoming calls to the SessionController'''
 class LoginRouter(Resource):
     def put(self):
-        return SessionController.login(loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return SessionController.login(loads(data))
 
 '''Routes incoming calls to the SessionController'''
 class LogoutRouter(Resource):

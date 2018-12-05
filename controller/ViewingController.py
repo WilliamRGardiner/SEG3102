@@ -23,13 +23,21 @@ class ViewingRouter(Resource):
 class ViewingIdRouter(Resource):
     def post(self, customerId, viewingId):
         # Viewing ID is actually a Property ID for this call
-        return ViewingController.create(customerId, viewingId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return ViewingController.create(customerId, viewingId, loads(data))
 
     def get(self, customerId, viewingId):
         return ViewingController.read(customerId, viewingId)
 
     def put(self, customerId, viewingId):
-        return ViewingController.update(customerId, viewingId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return ViewingController.update(customerId, viewingId, loads(data))
 
     def delete(self, customerId, viewingId):
         return ViewingController.delete(customerId, viewingId)

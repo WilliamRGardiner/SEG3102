@@ -31,7 +31,11 @@ class ImageIdRouter(Resource):
         return ImageController.read(propertyId, imageId)
 
     def put(self, propertyId, imageId):
-        return ImageController.update(propertyId, imageId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return ImageController.update(propertyId, imageId, loads(data))
 
     def delete(self, propertyId, imageId):
         return ImageController.remove(propertyId, imageId)

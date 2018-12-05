@@ -18,7 +18,11 @@ from service.AccountService import AccountService
 '''Routes incoming calls to the AccountController'''
 class AgentRouter(Resource):
     def post(self):
-        return AccountController.create(loads(request.data), AccountType.AGENT)
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return AccountController.create(loads(data), AccountType.AGENT)
 
 '''Routes incoming calls to the AccountController'''
 class AgentIdRouter(Resource):
@@ -26,7 +30,11 @@ class AgentIdRouter(Resource):
         return AccountController.read(agentId)
 
     def put(self, agentId):
-        return AccountController.update(agentId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return AccountController.update(agentId, loads(data))
 
     def delete(self, agentId):
         return AccountController.delete(agentId)
@@ -34,7 +42,11 @@ class AgentIdRouter(Resource):
 '''Routes incoming calls to the AccountController'''
 class CustomerRouter(Resource):
     def post(self):
-        return AccountController.create(loads(request.data), AccountType.CUSTOMER)
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return AccountController.create(loads(data), AccountType.CUSTOMER)
 
 '''Routes incoming calls to the AccountController'''
 class CustomerIdRouter(Resource):
