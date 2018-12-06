@@ -54,7 +54,11 @@ class CustomerIdRouter(Resource):
         return AccountController.read(customerId)
 
     def put(self, customerId):
-        return AccountController.update(customerId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return AccountController.update(customerId, loads(data))
 
     def delete(self, customerId):
         return AccountController.delete(customerId)
@@ -62,7 +66,11 @@ class CustomerIdRouter(Resource):
 '''Routes incoming calls to the AccountController'''
 class OwnerRouter(Resource):
     def post(self):
-        return AccountController.create(loads(request.data), AccountType.OWNER)
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return AccountController.create(loads(data), AccountType.OWNER)
 
 '''Routes incoming calls to the AccountController'''
 class OwnerIdRouter(Resource):
@@ -70,7 +78,11 @@ class OwnerIdRouter(Resource):
         return AccountController.read(ownerId)
 
     def put(self, ownerId):
-        return AccountController.update(ownerId, loads(request.data))
+        try:
+            data = request.data.decode('utf8')
+        except:
+            data = request.data
+        return AccountController.update(ownerId, loads(data))
 
     def delete(self, ownerId):
         return AccountController.delete(ownerId)
